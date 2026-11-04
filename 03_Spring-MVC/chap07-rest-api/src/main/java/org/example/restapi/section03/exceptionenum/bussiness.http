@@ -1,0 +1,9 @@
+### 회원 번호 받아서 예외처리
+GET http://localhost:8080/enum-error/users/0
+
+### 회원 번호 받아서 예외처리
+GET http://localhost:8080/enum-error/users/5
+
+### 회원 이름 받아서 예외처리
+GET http://localhost:8080/enum-error/users/check-name?
+    userName=유관순

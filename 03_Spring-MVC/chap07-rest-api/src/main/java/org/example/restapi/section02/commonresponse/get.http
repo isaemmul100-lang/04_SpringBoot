@@ -1,0 +1,12 @@
+### 전체 유저 조회
+GET http://localhost:8080/common-response/users
+
+<> 2026-11-04T100019.200.json
+
+### 특정 유저 조회
+GET http://localhost:8080/common-response/users/1
+
+<> 2026-11-04T100329.200.json
+
+### 공통응답
+GET http://localhost:8080/common-response/health
