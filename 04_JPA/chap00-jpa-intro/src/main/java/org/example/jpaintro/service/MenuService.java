@@ -3,7 +3,9 @@ package org.example.jpaintro.service;
 import lombok.RequiredArgsConstructor;
 import org.example.jpaintro.dto.MenuRequestDTO;
 import org.example.jpaintro.dto.MenuResponseDTO;
+import org.example.jpaintro.entity.Category;
 import org.example.jpaintro.entity.Menu;
+import org.example.jpaintro.repository.CategoryRepository;
 import org.example.jpaintro.repository.MenuRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ import java.util.List;
 public class MenuService {
 
     private final MenuRepository menuRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<MenuResponseDTO> findAll() {
 
@@ -32,10 +35,14 @@ public class MenuService {
 
     @Transactional
     public MenuResponseDTO caeate(MenuRequestDTO menuRequestDTO) {
+
+        Category category = categoryRepository.findById(menuRequestDTO.getCategoryCode())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."));
+
         Menu menu = new Menu(
                 menuRequestDTO.getMenuName(),
                 menuRequestDTO.getMenuPrice(),
-                menuRequestDTO.getCategoryCode(),
+                category,
                 menuRequestDTO.getOrderableStatus()
         );
 
@@ -48,6 +55,9 @@ public class MenuService {
     @Transactional
     public MenuResponseDTO Update(Integer menuCode, MenuRequestDTO menuRequestDTO) {
 
+        Category category = categoryRepository.findById(menuRequestDTO.getCategoryCode())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "카테고리를 찾을 수 없습니다."));
+
         // id로 수정할 메뉴 정보 찾아오기
         Menu menu = menuRepository.findById(menuCode)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "메뉴를 찾을 수 없습니다.")); // 없으면 예외를 던지고 있으면 menu에 담겠다는 것임
@@ -55,7 +65,7 @@ public class MenuService {
         menu.change(
                 menuRequestDTO.getMenuName(),
                 menuRequestDTO.getMenuPrice(),
-                menuRequestDTO.getCategoryCode(),
+                category,
                 menuRequestDTO.getOrderableStatus()
         );
 

@@ -24,17 +24,18 @@ public class Menu {
     @Column(name = "menu_price")
     private Integer menuPrice;
 
-    @Column(name = "category_code")
-    private Integer categoryCode;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_code")
+    private Category categoryCode;
 
     @Column(name = "orderable_status")
     private String orderableStatus;
 
-    public Menu(String menuName, Integer menuPrice, Integer categoryCode, String orderableStatus) {
+    public Menu(String menuName, Integer menuPrice, Category categoryCode, String orderableStatus) {
         change(menuName, menuPrice, categoryCode, orderableStatus);
     }
 
-    public void change(String menuName, Integer menuPrice, Integer categoryCode, String orderableStatus) {
+    public void change(String menuName, Integer menuPrice, Category categoryCode, String orderableStatus) {
         this.menuName = menuName;
         this.menuPrice = menuPrice;
         this.categoryCode = categoryCode;
