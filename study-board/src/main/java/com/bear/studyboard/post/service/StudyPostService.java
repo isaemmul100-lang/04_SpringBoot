@@ -62,6 +62,8 @@ public class StudyPostService {
         return PostDetailResponseDto.from(saveStudyPost);
     }
 
+    // 게시글 목록 조회
+    @Transactional(readOnly = true)
     public PageResponseDTO<PostListItemResponseDto> findPosts(Pageable pageable) {
 
         /*
@@ -81,20 +83,20 @@ public class StudyPostService {
         return PageResponseDTO.from(posts); // Page -> PageResponseDTO 변환 (클라이언트에서 필요한 값만 전달)
     }
 
+    // 게시글 상세 조회
     @Transactional(readOnly = true)
     public PostDetailResponseDto findPostById(Long postId) {
 
-        StudyPost studyPost = studyPostRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND, "요청한 아이디의 게시글을 찾을 수 없습니다."));
+        StudyPost studyPost = errorPostNotFound(postId);
 
         return studyPostRepository.findPostDetailById(studyPost.getId());
     }
 
+    // 게시글 수정
     @Transactional
     public PostDetailResponseDto updatePost(PostUpdateRequestDTO request, Long postId) {
 
-        StudyPost post = studyPostRepository.findById(postId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND, "요청한 아이디의 게시글을 찾을 수 없습니다."));
+        StudyPost post = errorPostNotFound(postId);
 
         StudyPost updatePost = new StudyPost(
                 post.getAuthor(),
@@ -109,5 +111,10 @@ public class StudyPostService {
         post.updateProfile(updatePost.getTitle(), updatePost.getBody(), updatePost.getReferenceUrl(), LocalDateTime.now());
 
         return PostDetailResponseDto.from(updatePost);
+    }
+
+    public StudyPost errorPostNotFound(Long postId) {
+        return studyPostRepository.findById(postId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND, "요청한 아이디의 게시글을 찾을 수 없습니다."));
     }
 }

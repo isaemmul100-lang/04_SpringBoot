@@ -2,8 +2,6 @@ package com.bear.studyboard.post.controller;
 
 import com.bear.studyboard.common.dto.ApiResponse;
 import com.bear.studyboard.common.dto.PageResponseDTO;
-import com.bear.studyboard.member.dto.MemberAccountResponseDTO;
-import com.bear.studyboard.member.dto.RegistryMemberRequestDTO;
 import com.bear.studyboard.post.dto.CreatePostRequestDTO;
 import com.bear.studyboard.post.dto.PostDetailResponseDto;
 import com.bear.studyboard.post.dto.PostListItemResponseDto;
@@ -36,7 +34,6 @@ public class StudyPostController {
      * */
 
 
-
     // 자료 등록
     @PostMapping
     public ResponseEntity<ApiResponse<PostDetailResponseDto>> createPost(
@@ -60,7 +57,7 @@ public class StudyPostController {
 
         return ResponseEntity.ok(ApiResponse.of(HttpStatus.OK, "게시물 목록 조회 완료", postPage));
     }
-    
+
     // 자료 상세 조회
     @GetMapping("/{postId}")
     public ResponseEntity<ApiResponse<PostDetailResponseDto>> findPostById(

@@ -9,9 +9,9 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     @Query("""
-select category
-from Category category
-order by category.id
-""")
+            select category
+            from Category category
+            order by category.id
+            """)
     List<Category> findAllWithCategory();
 }

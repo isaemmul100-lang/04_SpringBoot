@@ -42,7 +42,7 @@ public class CommentService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.POST_NOT_FOUND, "게시글을 찾을 수 없습니다."));
 
         Member member = memberRepository.findById(request.getAuthorId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, "게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new BusinessException(ErrorCode.USER_NOT_FOUND, "회원을 찾을 수 없습니다."));
 
         Comment comment = new Comment(
                 post,
@@ -57,6 +57,8 @@ public class CommentService {
         return CommentResponseDTO.from(saveComment);
     }
 
+    // 댓글 목록 조회
+    @Transactional(readOnly = true)
     public PageResponseDTO<CommentListItemResponseDTO> findPostComments(Pageable pageable, Long postId) {
 
         StudyPost post = studyPostRepository.findById(postId)
@@ -73,6 +75,23 @@ public class CommentService {
         return PageResponseDTO.from(postComments);
     }
 
+    // 댓글 수정
+//    @Transactional
+//    public CommentResponseDTO updateComment(String body, Long commentId) {
+//
+//        if (body == null) {
+//            throw new BusinessException(ErrorCode.INVALID_INPUT, "값을 입력해주세요");
+//        }
+//
+//        Comment comment = errorCommentNotFound(commentId);
+//
+//        comment.updateProfile(
+//                body,
+//                LocalDateTime.now());
+//
+//        return CommentResponseDTO.from(comment);
+//    }
+
     @Transactional
     public CommentResponseDTO updateComment(String body, Long commentId) {
 
@@ -80,21 +99,31 @@ public class CommentService {
             throw new BusinessException(ErrorCode.INVALID_INPUT, "값을 입력해주세요");
         }
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND, "댓글을 찾을 수 없습니다."));
+        Comment comment = errorCommentNotFound(commentId);
 
-        comment.updateProfile(
-                body,
-                LocalDateTime.now());
+        int updateCount = commentRepository.updateComment(body, comment.getId());
 
-        return CommentResponseDTO.from(comment);
+        if (updateCount == 0) {
+            throw new BusinessException(ErrorCode.INVALID_INPUT, "댓글이 수정되지 않았습니다.");
+        }
+
+        Comment updateComment = errorCommentNotFound(commentId);
+
+        return CommentResponseDTO.from(updateComment);
     }
 
+    // 댓글 삭제
+    @Transactional
     public void deleteComment(Long commentId) {
 
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND, "댓글을 찾을 수 없습니다."));
+        Comment comment = errorCommentNotFound(commentId);
 
         commentRepository.deleteById(comment.getId());
+    }
+
+    // 댓글 아이디로 찾기
+    public Comment errorCommentNotFound(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COMMENT_NOT_FOUND, "댓글을 찾을 수 없습니다."));
     }
 }

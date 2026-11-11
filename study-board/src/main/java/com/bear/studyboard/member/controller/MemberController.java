@@ -2,7 +2,6 @@ package com.bear.studyboard.member.controller;
 
 import com.bear.studyboard.common.dto.ApiResponse;
 import com.bear.studyboard.member.dto.MemberAccountResponseDTO;
-import com.bear.studyboard.member.dto.MemberDeleteRequestDTO;
 import com.bear.studyboard.member.dto.MemberUpdateRequestDTO;
 import com.bear.studyboard.member.dto.RegistryMemberRequestDTO;
 import com.bear.studyboard.member.service.MemberService;
@@ -10,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/api/members")
@@ -21,18 +18,18 @@ public class MemberController {
     private final MemberService memberService;
 
     // 회원가입
-        @PostMapping
-        public ResponseEntity<ApiResponse<MemberAccountResponseDTO>> register(
-                @RequestBody RegistryMemberRequestDTO request
-        ) {
+    @PostMapping
+    public ResponseEntity<ApiResponse<MemberAccountResponseDTO>> register(
+            @RequestBody RegistryMemberRequestDTO request
+    ) {
 
-            MemberAccountResponseDTO member = memberService.register(request);
+        MemberAccountResponseDTO member = memberService.register(request);
 
-            HttpStatus status = HttpStatus.CREATED;
+        HttpStatus status = HttpStatus.CREATED;
 
-            return ResponseEntity.status(status)
-                    .body(ApiResponse.of(status, "회원등록성공", member));
-        }
+        return ResponseEntity.status(status)
+                .body(ApiResponse.of(status, "회원등록성공", member));
+    }
 
     // 회원 정보 수정
     @PatchMapping("/{memberId}")

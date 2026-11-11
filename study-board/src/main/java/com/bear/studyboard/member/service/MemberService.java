@@ -19,6 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 회원가입
     @Transactional
     public MemberAccountResponseDTO register(RegistryMemberRequestDTO request) {
         // 회원가입 - email은 unique 중복일경우 예외 던지기
@@ -44,6 +45,7 @@ public class MemberService {
         return MemberAccountResponseDTO.from(savedMember);
     }
 
+    // 비밀번호 예외처리 메서드
     public String encodeNewPassword(String password) {
         try {
             return passwordEncoder.encode(password);
@@ -53,6 +55,7 @@ public class MemberService {
     }
 
     // 로그인 메서드
+    @Transactional(readOnly = true)
     public MemberAccountResponseDTO login(LoginMemberRequestDTO request) {
 
         String email = request.getEmail();
@@ -99,6 +102,10 @@ public class MemberService {
 
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.LOGIN_FAILED));
+
+        if (member.getDrawnAt() != null) {
+            throw new BusinessException(ErrorCode.MEMBER_WITHDRAWN, "이미 탈퇴한 회원입니다.");
+        }
 
         member.deleteProfile(LocalDateTime.now());
 
