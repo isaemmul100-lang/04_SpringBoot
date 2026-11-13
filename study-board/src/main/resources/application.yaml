@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: study-board
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/study_board
+    username: root
+    password: 1234
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    # OSIV(Open Session In View)
+    # true: 웹 요청 처리 동안 영속성 컨텍스트를 유지
+    # false: 웹 요청 전체에 영속성 컨텍스트를 유지하지 않음
+    # 영속성 컨텍스트가 닫힌 상태에서 초기화되지 않은 LAZY 필드에 접근하면
+    # LazyInitializationException이 발생할 수 있음
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace

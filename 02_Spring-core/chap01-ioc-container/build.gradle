@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    /*
+    스프링부트 4.1 -> 에서 Spring Framework 7.0.8 이상을 요구
+    - Spring Framework 7.xxx -> Java 17 이상을 요구
+    * */
+    testImplementation platform('org.junit:junit-bom:6.0.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
+    implementation("org.springframework:spring-core:7.0.8")
+    implementation("org.springframework:spring-context:7.0.8")
+    implementation("org.springframework:spring-beans:7.0.8")
+    implementation("org.springframework:spring-expression:7.0.8")
+    implementation("org.springframework:spring-aop:7.0.8")
+}
+
+test {
+    useJUnitPlatform()
+}

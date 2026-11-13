@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: chap06-file-upload
+  servlet:
+    # Multi-part 파일 업로드 관련 설정
+    multipart:
+      max-file-size: 10MB # 파일 하나의 최대 크기를 10MB로 설정
+      max-request-size: 10MB # 요청 당 최대 크기를 10MB로 설정
+
+# 사용자 정의 변수
+file:
+  upload:
+    windows:
+      path: C:/lsm/uploadedFiles
+    mac:
+      path: /myWs/uploadedFiles

@@ -1,0 +1,20 @@
+# 스프링 부트의 어플리케이션 환경 설정 파일
+# 들여쓰기 구조로 계층구조를 표현함
+# -> 공백의 갯수 주의
+
+# 스프링 프레임워크 관련설정
+spring:
+  # 어플리케이션 설정
+  application:
+    # 어플리케이션의 이름
+    name: chap01-request-mapping
+
+  thymeleaf:
+    cache: false
+
+# 내장 톰켓 관련 설정
+server:
+  port: 8081
+
+
+# url, 데이터베이스 접근 커넥션 정보
